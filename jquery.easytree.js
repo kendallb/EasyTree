@@ -945,12 +945,17 @@
         function ajaxService(actionUrl, json, callBack) {
             $.ajax({
                 url: actionUrl,
-                type: "POST",
+                type: (json == null) ? "GET" : "POST",
                 contentType: "application/json; charset=utf-8",
                 data: json,
                 success: callBack,
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Error: " + jqXHR.responseText);
+                    // Don't display anything if the error is blank. This will happen
+                    // if the AJAX request was cancelled due to navigating away to a new page 
+                    // which happens all the time on Firefox if it has not finished the AJAX request.
+                    if (jqXHR.responseText != '') {
+                        alert("Error: " + jqXHR.responseText);
+                    }
                 }
             });
         }
